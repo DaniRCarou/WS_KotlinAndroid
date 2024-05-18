@@ -76,3 +76,27 @@ fun makeCoffee(sugarCountInt : Int, name : String){
     println("Coffee with $sugarCountInt spoons of sugar for $name")
 
 }
+
+
+
+fun askCoffeeDetails(){
+
+    println("Who is the coffee for?")
+
+    var name = readln()
+
+
+    println("How many pieces of sugar do you want?")
+
+    var sugarCount = readln()
+    var sugarCountInt = sugarCount.toInt()
+
+
+
+    // 2. Here it will be called the function makeCoffee()
+
+    makeCoffee(sugarCountInt, name)
+
+
+
+}
