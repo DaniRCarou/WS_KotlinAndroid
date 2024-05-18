@@ -15,11 +15,19 @@ fun main(){
 
     println("Rock, Paper or Scissors? Enter your choice")
 
-    playerChoice = readln()
+    playerChoice = readln().lowercase()
+
+    while((playerChoice != "rock" && playerChoice != "r") && (playerChoice != "paper" && playerChoice != "p") && (playerChoice != "scissors" && playerChoice != "s")){
+
+        println("Rock, Paper or Scissors? Enter your choice")
+
+        playerChoice = readln().lowercase()
 
 
+    }
 
-// 2. Added
+
+    // 2. Added
 
 
 
@@ -112,15 +120,15 @@ fun main(){
 
     val winner = when{
 
-    playerChoice == computerChoice -> "Tie"
+        playerChoice == computerChoice -> "Tie"
 
-    playerChoice == "Rock" && computerChoice == "Scissors" -> "Player"
+        playerChoice == "Rock" && computerChoice == "Scissors" -> "Player"
 
-    playerChoice == "Paper" && computerChoice == "Rock" -> "Player"
+        playerChoice == "Paper" && computerChoice == "Rock" -> "Player"
 
-    playerChoice == "Scissors" && computerChoice == "Paper" -> "Player"
+        playerChoice == "Scissors" && computerChoice == "Paper" -> "Player"
 
-    else -> "Computer"
+        else -> "Computer"
 
     }
 

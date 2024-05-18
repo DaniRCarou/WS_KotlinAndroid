@@ -74,7 +74,7 @@ fun main(){
 
 
 
-    // Booleans
+    // BOOLEANS
 
     val myTrue: Boolean = true
     val myFalse: Boolean = false
@@ -111,7 +111,7 @@ fun main(){
 
 
 
-    // Characters
+    // CHARACTERS
 
     /*
     The type Char can only store one character -> '1'
@@ -143,7 +143,7 @@ fun main(){
 
 
 
-    // Strings
+    // STRINGS
 
     /*
     String variable allows to store a set of characters and basically
@@ -190,7 +190,13 @@ fun main(){
 
 
 
-    // If else statements
+
+
+
+
+
+
+    // IF ELSE STATEMENTS
     // Comparison operators: Greater than (>), Equal to (==), Less than (<), Greater than or equal to (>=), Lower than or equal to (<=)
 
     var age = 41
@@ -232,7 +238,6 @@ fun main(){
         println(enteredValue + " You too young to go into the club")
 
     }
-
 
 
 
@@ -287,6 +292,41 @@ fun main(){
 
 
 
+
+
+
+
+
+    // "WHILE" LOOPS WITH USER INPUT
+
+
+    var userInput = readln()
+
+    while (userInput == "1"){
+
+        println("While loop executed")
+
+        userInput = readln() // to stop the loop and starts again
+
+    }
+
+    println ("Loop is done!")
+
+
+
+    // another way
+
+    var userInput2 = readln()
+
+    while (userInput2 == "1"){
+
+        println("While loop executed")
+
+        break // to go out of the loop
+
+    }
+
+    println ("Loop is done!")
 
 
 
