@@ -3,6 +3,10 @@ package com.developing.kotlinbasics
 fun main(){
 
 
+    /*
+    - This is a multiline comment
+    - This is another comment
+    */
 
 
     // Objects/Instances of the class Dog are created
