@@ -101,7 +101,7 @@ fun UnitConverter(){
                     // ArrowDropDown, is the specific name of the icon within Icons.Default. It represents a downward-pointing arrow, commonly used in dropdown menus or to indicate that more options are available when an element is clicked.
 
                     // contentDescription, is an optional parameter that provides a textual description of the icon.
-                    // n this case, the contentDescription is set to an empty string. This typically indicates that the icon is purely decorative and does not convey any important information. Setting it to an empty string tells accessibility tools to ignore the icon, so it won’t be announced to users with screen readers.
+                    // in this case, the contentDescription is set to an empty string. This typically indicates that the icon is purely decorative and does not convey any important information. Setting it to an empty string tells accessibility tools to ignore the icon, so it won’t be announced to users with screen readers.
                     Icon(Icons.Default.ArrowDropDown, contentDescription = "Arrow Down")
 
                 }
