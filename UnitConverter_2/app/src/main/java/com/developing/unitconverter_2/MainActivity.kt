@@ -25,12 +25,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.developing.unitconverter_2.ui.theme.UnitConverter_2Theme
+import kotlin.math.roundToInt
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,6 +65,36 @@ class MainActivity : ComponentActivity() {
 fun UnitConverter(){
 
 
+// 16.11.24 - 1.This was explained at the CaptainGame
+    var inputValue by remember { mutableStateOf("") } // This variable will be used at the line 101 -> OutlinedTextField(value = inputValue , onValueChange = {inputValue = it})
+    var outputValue by remember { mutableStateOf("") }
+    var inputUnit by remember { mutableStateOf("Centimeters") }
+    var outputUnit by remember { mutableStateOf("Meters") }
+    var iExpanded by remember { mutableStateOf(false) }
+    var oExpanded by remember { mutableStateOf(false) }
+    val conversionFactor = remember { mutableStateOf(0.01) } // This is the mutable state of a boolean, so it stores a boolean. This will generally just be the multiplier that we are going to apply to whatever the user has entered.
+
+
+    // This is my personal touch
+    var textConversion by remember { mutableStateOf("Select") } // I use this variable to change the text when I click on a Menu item.
+
+
+    // This function will be used when clicking a item in the menu of the input Button
+    fun convertUnits(){
+
+       val inputValueDouble = inputValue.toDoubleOrNull() ?: 0.0 // This will change the input value as a double or not if it is not necessary. It parses the string as a double number and returns the result or null.
+                                                                 // ' ?: ' -> This is the elvis operator, used to provide a default value when the left-hand expression is null. If inputValue cannot be converted (e.g., it’s an invalid number like "abc"), this method returns null instead of throwing an exception.
+                                                                 // 0.0 -> A default value (of type Double) to use when inputValue cannot be converted into a valid number.
+
+       val result = (inputValueDouble * conversionFactor.value * 100.0).roundToInt() / 100.0 // This expression converts inputValueDouble using conversionFactor. Rounds the result to two decimal places by scaling (×100), rounding, and then scaling back (÷100).
+                                                                                             // roundToInt() must to be imported and converted to function.
+
+       outputValue = result.toString() // The outputValue will be converted to String.
+
+    }
+
+
+
 
     
     // Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally )
@@ -70,15 +105,12 @@ fun UnitConverter(){
     Column (modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Center, horizontalAlignment = Alignment.CenterHorizontally){
 
 
-
-
-
-
-
         // HERE ALL THE UI ELEMENTS WILL BE STOCKED BELOW EACH OTHER
 
-        Text(text = "Unit Converter", modifier = Modifier.padding(100.dp)) // The minimum requirement that a text composable has is the content of that text property
-
+        Text(text = "Unit Converter", modifier = Modifier.padding(10.dp)) // The minimum requirement that a text composable has is the content of that text property
+        //OR
+        Text(text = "Unit Converter 2")
+        Spacer(modifier = Modifier.height(5.dp))
         // Spacer option -> is a composable which adds empty space between other elements without the need to use margins or padding on specific components.
         // You can copy and paste this sentence everywhere you want to keep this distance
         // 16.dp -> 16.density-independent pixel, It is a unit of measurement used in Android UI design to ensure that UI elements maintain consistent proportions and sizes across devices with varying screen densities. One dp is considered equal to one pixel on a screen with a density of 160 dpi (dots per inch).
@@ -87,16 +119,11 @@ fun UnitConverter(){
 
 
 
-
-
-
-
-        OutlinedTextField(value = "" , onValueChange = {})    // onValueChange, is something that should be executed the moment that we change the value.
-                                                              // onValueChange = {} -> nothing should happen, when the Value of the OutlinedTextField changes, I could use this, if I don´t need to implement it yet.
-                                                              // {} ->  This is an anonymous function (local final fun `<anonymous>`), which is a function that doesn't have a name. So we cannot call it, but it can still be executed.
-
-
-
+        OutlinedTextField(value = inputValue , onValueChange = {inputValue = it}, label = {Text ("Enter value")})    // onValueChange, is something that should be executed the moment that we change the value.
+                                                                                            // onValueChange = {} -> nothing should happen, when the Value of the OutlinedTextField changes, I could use this, if I don´t need to implement it yet.
+                                                                                            // {} ->  This is an anonymous function (local final fun `<anonymous>`), which is a function that doesn't have a name. So we cannot call it, but it can still be executed.
+                                                                                            // it -> it is the value you introduces at the outlinedTextfield
+                                                                                            // label (property, @composable type) -> This is a placeholder text
 
 
 
@@ -146,22 +173,7 @@ fun UnitConverter(){
 
 
 
-
-
-
-
-
-
-
-        // You can't write the word text: inside of the parentheses, just write the text between quotation marks-> (text:"Result")
-
-        Text("Result:")
-
-
-
-
-
-
+        Spacer(modifier = Modifier.height(16.dp))
 
 
 
@@ -174,14 +186,14 @@ fun UnitConverter(){
 
 
 
-
+            // Input Box
             Box {
 
 
+                // Input Button
+                Button(onClick = { iExpanded = true }) {
 
-                Button(onClick = { /*TODO*/ }) {
-
-                    Text("Select")
+                    Text(textConversion)
 
                     // Icon, is a Jetpack Compose component used to display an icon on the screen. It is part of the Material Design library and can be customized in various ways. It has to be imported the @composable icon, because I am working with @Composables
                     // Icons, is an object that contains a collection of predefined icons provided by Material Design. It is organized into different categories and allows you to easily access various standard icons for use in your application. (Class, like a summary of icons) has to be imported too
@@ -200,19 +212,20 @@ fun UnitConverter(){
                 // In compose, the DropdownMenu component enables the creation of other option selector.
                 // It's a like a menu and can display a list of choice using its child element drop down menu item.
                 // And we have already provided a container and a trigger for it, although not functioning, so the trigger ("disparador" o "gatillo") will be the button click event that we have.
+                // iExpanded -> var iExpanded by remember { mutableStateOf(false) }, This remember is used to display a menu by clicking the button
                 // expanded -> is boolean, so it has to contains true (the menu is initially open) or false (the menu is initially closed)
-                // onDismissRequest -> Is the callback when the menu is dismissed.
-                DropdownMenu(expanded = false, onDismissRequest = { /*TODO*/ }) {
+                // onDismissRequest -> Is the callback when the menu is dismissed. This request is triggered or called when the user requests to dismiss the menu, such as by tapping outside the menu bounds.
+                DropdownMenu(expanded = iExpanded, onDismissRequest = { iExpanded = false }) {
 
                     // Here will be added the DropdownMenu items.
                     // We can have a text for the drop down menu item and an onClick event that we can define.
-                    DropdownMenuItem(text = { Text(text = "Centimeters")}, onClick = { /*TODO*/ })
+                    DropdownMenuItem(text = { Text(text = "Centimeters")}, onClick = { iExpanded = false; inputUnit = "Centimeters"; conversionFactor.value = 0.01; textConversion = "Centimeters"; convertUnits() }) // onClick -> The menu will be closed, etc.. and textConversion will change the Button's text to Centimeters
 
-                    DropdownMenuItem(text = { Text(text = "Meters")}, onClick = { /*TODO*/ })
+                    DropdownMenuItem(text = { Text(text = "Meters")}, onClick = { iExpanded = false; inputUnit = "Meters"; conversionFactor.value = 1.0; textConversion = "Meters"; convertUnits() })
 
-                    DropdownMenuItem(text = { Text(text = "Feet")}, onClick = { /*TODO*/ })
+                    DropdownMenuItem(text = { Text(text = "Feet")}, onClick = { iExpanded = false; inputUnit = "Feet"; conversionFactor.value = 0.3048; textConversion = "Feet"; convertUnits() })
 
-                    DropdownMenuItem(text = { Text(text = "Milimeters")}, onClick = { /*TODO*/ })
+                    DropdownMenuItem(text = { Text(text = "Millimeters")}, onClick = { iExpanded = false; inputUnit = "Millimeters"; conversionFactor.value = 0.001; textConversion = "Millimeters"; convertUnits() })
 
                 }
 
@@ -236,12 +249,12 @@ fun UnitConverter(){
 
 
 
-
+            // Output Box
             Box {
 
 
-
-                Button(onClick = { /*TODO*/ }) {
+                // Output Button
+                Button(onClick = { oExpanded = true }) {
 
                     Text("Select")
 
@@ -253,12 +266,12 @@ fun UnitConverter(){
                 // It's a like a menu and can display a list of choice using its child element drop down menu item.
                 // And we have already provided a container and a trigger for it, although not functioning, so the trigger ("disparador" o "gatillo") will be the button click event that we have.
                 // expanded -> is boolean, so it has to contains true (the menu is initially open) or false (the menu is initially closed)
-                // onDismissRequest -> Is the callback when the menu is dismissed.
-                DropdownMenu(expanded = true, onDismissRequest = { /*TODO*/ }) {
+                // onDismissRequest -> Is the callback when the menu is dismissed. This request is triggered or called when the user requests to dismiss the menu, such as by tapping outside the menu bounds.
+                DropdownMenu(expanded = oExpanded, onDismissRequest = { oExpanded = false }) {
 
                     // Here will be added the DropdownMenu items.
                     // We can have a text for the drop down menu item and an onClick event that we can define.
-                    DropdownMenuItem(text = { Text(text = "Centimeters") }, onClick = { /*TODO*/ })
+                    DropdownMenuItem(text = { Text(text = "Centimeters") }, onClick = { iExpanded = false })
 
                     DropdownMenuItem(text = { Text(text = "Meters") }, onClick = { /*TODO*/ })
 
@@ -271,8 +284,13 @@ fun UnitConverter(){
 
             }
 
-
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        // You can't write the word text: inside of the parentheses, just write the text between quotation marks-> (text:"Result")
+
+        Text("Result:")
 
     }
 
